@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         body {
             font-family: 'Gamja Flower', cursive;
@@ -17,6 +18,7 @@
             user-select: none;
             -webkit-user-select: none;
         }
+        
         @keyframes heartbeat {
             0% { transform: scale(1); }
             14% { transform: scale(1.12); }
@@ -27,6 +29,7 @@
         .heartbeat-btn {
             animation: heartbeat 1.5s infinite ease-in-out;
         }
+
         .fade-in {
             animation: fadeIn 0.6s ease-out forwards;
         }
@@ -34,17 +37,21 @@
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         ::-webkit-scrollbar {
             display: none;
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 overflow-hidden">
+
     <div id="main-card" class="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl max-w-md w-full text-center border-4 border-pink-200 relative min-h-[400px] flex flex-col justify-center">
+        
         <div id="stage-1" class="fade-in space-y-6 relative w-full h-full">
             <div class="text-6xl animate-bounce">💖</div>
             <h1 class="text-4xl font-bold text-pink-600 tracking-wide">나랑 데이트 할래?</h1>
             <p class="text-xl text-gray-600">거절은 거절한다! 얼른 YES를 눌러봐 😎</p>
+            
             <div class="flex justify-center items-center gap-6 pt-6 min-h-[100px] relative w-full" id="btn-container">
                 <button id="yes-btn" onclick="goToStage(2)" class="heartbeat-btn bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-2xl font-bold px-8 py-3.5 rounded-full shadow-lg transition-transform duration-150 transform hover:scale-105 active:scale-95 z-10">
                     YES! 💘
@@ -59,6 +66,7 @@
             <div class="text-6xl">🗓️</div>
             <h1 class="text-3xl font-bold text-pink-600">언제가 좋아? 시간 골라줘!</h1>
             <p class="text-lg text-gray-500">너 편한 날로 맞춰볼게!</p>
+
             <div class="space-y-4 text-left pt-2">
                 <div>
                     <label class="block text-xl font-bold text-gray-700 mb-1"><i class="fa-regular fa-calendar-days text-pink-500 mr-1"></i> 날짜 선택</label>
@@ -69,6 +77,7 @@
                     <input type="time" id="time-input" class="w-full p-3 rounded-2xl border-2 border-pink-200 focus:border-pink-500 outline-none text-xl bg-pink-50/50 text-gray-700">
                 </div>
             </div>
+
             <div class="pt-4">
                 <button onclick="saveDateTimeAndNext()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-2xl font-bold py-3 rounded-2xl shadow-lg transition-transform active:scale-95">
                     다음 단계로 넘어가기 ➡️
@@ -80,6 +89,7 @@
             <div class="text-6xl">🍕</div>
             <h1 class="text-3xl font-bold text-pink-600">밥은 뭐가 좋아? 맛집 가자!</h1>
             <p class="text-lg text-gray-500">원하는 메뉴를 하나만 콕 집어줘!</p>
+
             <div class="grid grid-cols-2 gap-3 pt-2">
                 <button onclick="selectFood('초밥 🍣', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
                     <span class="text-3xl">🍣</span>
@@ -106,9 +116,11 @@
                     <span class="font-bold text-gray-700">직접 쓸래!</span>
                 </button>
             </div>
+
             <div id="custom-food-container" class="hidden fade-in">
                 <input type="text" id="custom-food-input" placeholder="어떤 음식 먹고 싶어? 적어줘!" class="w-full p-3 rounded-2xl border-2 border-pink-300 focus:border-pink-500 outline-none text-xl bg-pink-50/50 text-gray-700 text-center">
             </div>
+
             <div class="pt-4">
                 <button id="submit-btn" onclick="confirmAllSelection()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-2xl font-bold py-3 rounded-2xl shadow-lg transition-transform active:scale-95">
                     예약 완료하기! 💌
@@ -119,23 +131,33 @@
         <div id="stage-4" class="hidden fade-in space-y-6">
             <div class="text-7xl animate-pulse">🎉</div>
             <h1 class="text-4xl font-bold text-pink-600">데이트 신청 성공!</h1>
+            
             <div class="bg-pink-50/80 p-5 rounded-2xl border-2 border-dashed border-pink-300 space-y-4">
-                <p class="text-2xl font-bold text-gray-700 leading-relaxed">거절 안 해줘서 고마워 💗</p>
+                <p class="text-2xl font-bold text-gray-700 leading-relaxed">
+                    거절 안 해줘서 고마워 💗
+                </p>
                 <div class="space-y-2 text-left text-xl text-gray-600 px-2 border-t border-pink-200 pt-3">
                     <p><i class="fa-regular fa-calendar-check text-pink-500 mr-2"></i>약속날짜 : <span id="final-date" class="font-bold text-gray-800"></span></p>
                     <p><i class="fa-regular fa-clock text-pink-500 mr-2"></i>만날시간 : <span id="final-time" class="font-bold text-gray-800"></span></p>
                     <p><i class="fa-solid fa-utensils text-pink-500 mr-2"></i>먹을음식 : <span id="final-food" class="font-bold text-gray-800"></span></p>
                 </div>
             </div>
-            <p class="text-2xl font-bold text-rose-500 animate-bounce pt-2">늦지 않게 내가 데리러 갈게! 🥰</p>
+            
+            <p class="text-2xl font-bold text-rose-500 animate-bounce pt-2">
+                늦지 않게 내가 데리러 갈게! 🥰
+            </p>
         </div>
+
     </div>
 
     <script>
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1518624656788295871/JnHLpiBi5D2dpGEvNzmS_bi3i81jrNcDSBjERSOjqvU4FiszbdVyV8TdClDh4skeMiv-';
+
         let selectedDate = '';
         let selectedTime = '';
         let selectedFood = '';
         let noClickCount = 0;
+
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const card = document.getElementById('main-card');
@@ -143,6 +165,7 @@
         function escapeNoButton(e) {
             if (e) e.preventDefault();
             noClickCount++;
+
             if (noClickCount >= 4) {
                 noBtn.style.position = 'fixed';
                 noBtn.style.left = '150vw';
@@ -151,27 +174,34 @@
                 noBtn.style.opacity = '0';
                 return;
             }
+
             const cardRect = card.getBoundingClientRect();
             const btnWidth = noBtn.offsetWidth;
             const btnHeight = noBtn.offsetHeight;
             const yesRect = yesBtn.getBoundingClientRect();
+
             let targetX = 0;
             let targetY = 0;
             let isOverlapping = true;
+
             while (isOverlapping) {
                 targetX = cardRect.left + 24 + Math.random() * (cardRect.width - btnWidth - 48);
                 targetY = cardRect.top + 24 + Math.random() * (cardRect.height - btnHeight - 48);
+
                 const checkGap = 15;
                 const isXOverlap = (targetX + btnWidth + checkGap > yesRect.left) && (targetX - checkGap < yesRect.right);
                 const isYOverlap = (targetY + btnHeight + checkGap > yesRect.top) && (targetY - checkGap < yesRect.bottom);
+
                 if (!(isXOverlap && isYOverlap)) {
                     isOverlapping = false;
                 }
             }
+
             noBtn.style.position = 'fixed';
             noBtn.style.left = `${targetX}px`;
             noBtn.style.top = `${targetY}px`;
         }
+
         noBtn.addEventListener('mouseenter', escapeNoButton);
         noBtn.addEventListener('touchstart', escapeNoButton, { passive: false });
         noBtn.addEventListener('click', escapeNoButton);
@@ -187,12 +217,15 @@
         function saveDateTimeAndNext() {
             const dateVal = document.getElementById('date-input').value;
             const timeVal = document.getElementById('time-input').value;
+
             if (!dateVal || !timeVal) {
                 alert('날짜랑 시간을 모두 선택해줘야 내가 데리러 가지! 🥺');
                 return;
             }
+
             const dateParts = dateVal.split('-');
             selectedDate = `${dateParts[0]}년 ${dateParts[1]}월 ${dateParts[2]}일`;
+
             const timeParts = timeVal.split(':');
             let hour = parseInt(timeParts[0]);
             const minute = timeParts[1];
@@ -200,6 +233,7 @@
             if (hour > 12) hour -= 12;
             if (hour === 0) hour = 12;
             selectedTime = `${ampm} ${hour}시 ${minute}분`;
+
             goToStage(3);
         }
 
@@ -233,6 +267,7 @@
                 alert('우리 맛있는 거 뭐 먹을지 하나 골라줘! 😋');
                 return;
             }
+
             if (selectedFood === 'CUSTOM') {
                 const customVal = document.getElementById('custom-food-input').value.trim();
                 if (!customVal) {
@@ -241,8 +276,38 @@
                 }
                 selectedFood = customVal;
             }
-            
-            showFinalStage();
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = '전송 중... 🚀';
+
+            const payload = {
+                embeds: [{
+                    title: "💖 데이트 신청 수락 알림!",
+                    color: 16729220,
+                    fields: [
+                        { name: "🗓️ 약속 날짜", value: selectedDate, inline: true },
+                        { name: "⏰ 만날 시간", value: selectedTime, inline: true },
+                        { name: "🍴 먹을 음식", value: selectedFood, inline: true }
+                    ],
+                    footer: {
+                        text: "늦지 않게 데리러 가세요! 🥰"
+                    }
+                }]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                showFinalStage();
+            })
+            .catch(() => {
+                showFinalStage();
+            });
         }
 
         function showFinalStage() {
@@ -256,9 +321,23 @@
         function triggerCelebrationConfetti() {
             const duration = 4 * 1000;
             const end = Date.now() + duration;
+
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffc0cb'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffc0cb'] });
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffc0cb']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffc0cb']
+                });
+
                 if (Date.now() < end) {
                     requestAnimationFrame(frame);
                 }
