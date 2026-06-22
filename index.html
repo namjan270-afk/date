@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이트 신청</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #ffe4e1;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+        h1 {
+            color: #ff4500;
+            margin-bottom: 30px;
+        }
+        .container {
+            position: relative;
+            text-align: center;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        #yesBtn {
+            background-color: #ff69b4;
+            color: white;
+        }
+        #noBtn {
+            background-color: #808080;
+            color: white;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="questionStage">
+        <h1>나랑 데이트 할래? 💖</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="nextStage()">YES!</button>
+            <button id="noBtn">NO</button>
+        </div>
+    </div>
+
+    <div class="container" id="successStage" style="display: none;">
+        <h1>야호! 🥰</h1>
+        <p style="font-size: 20px; color: #555;">금요일 저녁 6시에 데리러 갈게!</p>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+
+        function moveButton() {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        }
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
+
+        function nextStage() {
+            document.getElementById('questionStage').style.display = 'none';
+            document.getElementById('successStage').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
