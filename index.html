@@ -83,7 +83,7 @@
                     <span class="text-3xl">🍣</span>
                     <span class="font-bold text-gray-700">맛있는 초밥</span>
                 </button>
-                <button onclick="selectFood('파pasta 🍝', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                <button onclick="selectFood('파스타 🍝', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
                     <span class="text-3xl">🍝</span>
                     <span class="font-bold text-gray-700">고급진 양식</span>
                 </button>
@@ -128,7 +128,9 @@
         </div>
     </div>
     <script>
-        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1518617571958456542/bQcrXCMtvDSfUSlKM5tElzDKYE14UIRlooCua02QyUmLYeoSgFixE1H_r4z4ZDo438uY';
+        // ⚠️ 주의: 반드시 디스코드에서 "새로 만든" 웹훅 주소를 넣어주세요!
+        const DISCORD_WEBHOOK_URL = '여기에_새로_만든_웹훅_주소_넣기';
+        
         let selectedDate = '';
         let selectedTime = '';
         let selectedFood = '';
@@ -248,7 +250,7 @@
                 }]
             };
             
-            // 전송 안정성 확보를 위해 mode: 'no-cors' 옵션 추가 적용
+            // 보안을 뚫고 확실히 전송하기 위한 no-cors 모드 유지
             fetch(DISCORD_WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
