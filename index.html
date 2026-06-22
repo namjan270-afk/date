@@ -3,88 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이트 신청</title>
+    <title>너에게 보내는 메시지 💌</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome (아이콘) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 구글 감자꽃 폰트 (귀여운 손글씨) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+    <!-- Confetti (폭죽 효과) 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #ffe4e1;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            margin: 0;
+            font-family: 'Gamja Flower', cursive;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+            user-select: none;
+            -webkit-user-select: none;
         }
-        h1 {
-            color: #ff4500;
-            margin-bottom: 30px;
+        
+        /* YES 버튼 두근두근 심장박동 효과 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.12); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.12); }
+            70% { transform: scale(1); }
         }
-        .container {
-            position: relative;
-            text-align: center;
+        .heartbeat-btn {
+            animation: heartbeat 1.5s infinite ease-in-out;
         }
-        .buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
+
+        /* 단계 전환 시 부드러운 페이드인 */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
         }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: transform 0.1s;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        #yesBtn {
-            background-color: #ff69b4;
-            color: white;
-        }
-        #noBtn {
-            background-color: #808080;
-            color: white;
-            position: absolute;
+
+        /* 스크롤바 숨기기 */
+        ::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center p-4 overflow-hidden">
 
-    <div class="container" id="questionStage">
-        <h1>나랑 데이트 할래? 💖</h1>
-        <div class="buttons">
-            <button id="yesBtn" onclick="nextStage()">YES!</button>
-            <button id="noBtn">NO</button>
-        </div>
-    </div>
-
-    <div class="container" id="successStage" style="display: none;">
-        <h1>야호! 🥰</h1>
-        <p style="font-size: 20px; color: #555;">금요일 저녁 6시에 데리러 갈게!</p>
-    </div>
-
-    <script>
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-
-        function moveButton() {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    <!-- 메인 카드 컨테이너 -->
+    <div class="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl max-w-md w-full text-center border-4 border-pink-200 relative">
+        
+        <!-- ================= STAGE 1: 데이트 신청 질문 ================= -->
+        <div id="stage-1" class="fade-in space-y-6">
+            <div class="text-6xl animate-bounce">💖</div>
+            <h1 class="text-4xl font-bold text-pink-600 tracking-wide">나랑 데이트 할래?</h1>
+            <p class="text-xl text-gray-600">거절은 거절한다! 얼른 YES를 눌러봐 😎</p>
             
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
+            <div class="flex justify-center items-center gap-6 pt-6 min-h-[80px]">
+                <!-- YES 버튼 -->
+                <button onclick="goToStage(2)" class="heartbeat-btn bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-2xl font-bold px-8 py-3.5 rounded-full shadow-lg transition-transform duration-150 transform hover:scale-105 active:scale-95">
+                    YES! 💘
+                </button>
+                <!-- NO 버튼 (도망치는 주범) -->
+                <button id="no-btn" class="bg-gray-400 text-white text-xl font-bold px-8 py-3.5 rounded-full shadow-md transition-all duration-200 z-50">
+                    NO 😢
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= STAGE 2: 날짜 및 시간 선택 ================= -->
+        <div id="stage-2" class="hidden fade-in space-y-6">
+            <div class="text-6xl">🗓️</div>
+            <h1 class="text-3xl font-bold text-pink-600">언제가 좋아? 시간 골라줘!</h1>
+            <p class="text-lg text-gray-500">너 편한 날로 맞춰볼게!</p>
+
+            <div class="space-y-4 text-left pt-2">
+                <div>
+                    <label class="block text-xl font-bold text-gray-700 mb-1"><i class="fa-regular fa-calendar-days text-pink-500 mr-1"></i> 날짜 선택</label>
+                    <input type="date" id="date-input" class="w-full p-3 rounded-2xl border-2 border-pink-200 focus:border-pink-500 outline-none text-xl bg-pink-50/50 text-gray-700">
+                </div>
+                <div>
+                    <label class="block text-xl font-bold text-gray-700 mb-1"><i class="fa-regular fa-clock text-pink-500 mr-1"></i> 시간 선택</label>
+                    <input type="time" id="time-input" class="w-full p-3 rounded-2xl border-2 border-pink-200 focus:border-pink-500 outline-none text-xl bg-pink-50/50 text-gray-700">
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button onclick="saveDateTimeAndNext()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-2xl font-bold py-3 rounded-2xl shadow-lg transition-transform active:scale-95">
+                    다음 단계로 넘어가기 ➡️
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= STAGE 3: 음식 메뉴 선택 ================= -->
+        <div id="stage-3" class="hidden fade-in space-y-6">
+            <div class="text-6xl">🍕</div>
+            <h1 class="text-3xl font-bold text-pink-600">밥은 뭐가 좋아? 맛집 가자!</h1>
+            <p class="text-lg text-gray-500">원하는 메뉴를 하나만 콕 집어줘!</p>
+
+            <!-- 음식 메뉴 그리드 -->
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="selectFood('초밥 🍣', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                    <span class="text-3xl">🍣</span>
+                    <span class="font-bold text-gray-700">맛있는 초밥</span>
+                </button>
+                <button onclick="selectFood('파스타 🍝', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                    <span class="text-3xl">🍝</span>
+                    <span class="font-bold text-gray-700">고급진 양식</span>
+                </button>
+                <button onclick="selectFood('삼겹살 🥓', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                    <span class="text-3xl">🥓</span>
+                    <span class="font-bold text-gray-700">지글지글 고기</span>
+                </button>
+                <button onclick="selectFood('떡볶이 🌶️', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                    <span class="text-3xl">🌶️</span>
+                    <span class="font-bold text-gray-700">매콤한 분식</span>
+                </button>
+                <button onclick="selectFood('달달한 디저트 🍰', this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                    <span class="text-3xl">🍰</span>
+                    <span class="font-bold text-gray-700">예쁜 카페/디저트</span>
+                </button>
+                <button onclick="toggleCustomFoodInput(this)" class="food-option-btn p-4 rounded-2xl border-2 border-gray-200 hover:border-pink-300 bg-gray-50/50 hover:bg-pink-50/30 transition-all text-xl flex flex-col items-center justify-center gap-1">
+                    <span class="text-3xl">✍️</span>
+                    <span class="font-bold text-gray-700">직접 쓸래!</span>
+                </button>
+            </div>
+
+            <!-- 직접 입력 인풋창 (숨겨져 있다가 '직접 쓸래!' 클릭 시 표시) -->
+            <div id="custom-food-container" class="hidden fade-in">
+                <input type="text" id="custom-food-input" placeholder="어떤 음식 먹고 싶어? 적어줘!" class="w-full p-3 rounded-2xl border-2 border-pink-300 focus:border-pink-500 outline-none text-xl bg-pink-50/50 text-gray-700 text-center">
+            </div>
+
+            <div class="pt-4">
+                <button onclick="confirmAllSelection()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-2xl font-bold py-3 rounded-2xl shadow-lg transition-transform active:scale-95">
+                    예약 완료하기! 💌
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= STAGE 4: 감동의 최종 화면 ================= -->
+        <div id="stage-4" class="hidden fade-in space-y-6">
+            <div class="text-7xl animate-pulse">🎉</div>
+            <h1 class="text-4xl font-bold text-pink-600">데이트 신청 성공!</h1>
+            
+            <div class="bg-pink-50/80 p-5 rounded-2xl border-2 border-dashed border-pink-300 space-y-4">
+                <p class="text-2xl font-bold text-gray-700 leading-relaxed">
+                    거절 안 해줘서 고마워 💗
+                </p>
+                <div class="space-y-2 text-left text-xl text-gray-600 px-2 border-t border-pink-200 pt-3">
+                    <p><i class="fa-regular fa-calendar-check text-pink-500 mr-2"></i>약속날짜 : <span id="final-date" class="font-bold text-gray-800"></span></p>
+                    <p><i class="fa-regular fa-clock text-pink-500 mr-2"></i>만날시간 : <span id="final-time" class="font-bold text-gray-800"></span></p>
+                    <p><i class="fa-solid fa-utensils text-pink-500 mr-2"></i>먹을음식 : <span id="final-food" class="font-bold text-gray-800"></span></p>
+                </div>
+            </div>
+            
+            <p class="text-2xl font-bold text-rose-500 animate-bounce pt-2">
+                늦지 않게 내가 데리러 갈게! 🥰
+            </p>
+        </div>
+
+    </div>
+
+    <!-- 스크립트 제어 코드 -->
+    <script>
+        // 데이트 신청 변수들
+        let selectedDate = '';
+        let selectedTime = '';
+        let selectedFood = '';
+
+        const noBtn = document.getElementById('no-btn');
+
+        // NO 버튼 요리조리 피하는 로직 (데스크톱 마우스오버 & 모바일 터치 대응)
+        function escapeNoButton() {
+            // 버튼 크기 및 패딩 영역 확보를 위한 제한 계산
+            const padding = 20;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // 전체 뷰포트 크기 기준으로 도망갈 좌표 구함
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+
+            // 최소 패딩(20px)과 최대 뷰포트 범위 내에서 무작위 좌표 계산
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            // 버튼의 포지션을 강제로 absolute/fixed로 바꾼 후 날림
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
         }
 
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('click', moveButton);
+        // 이벤트 등록 (마우스 닿을 때, 터치 시작할 때 모두 작동)
+        noBtn.addEventListener('mouseenter', escapeNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // 모바일 줌인/클릭 딜레이 방지
+            escapeNoButton();
+        });
 
-        function nextStage() {
-            document.getElementById('questionStage').style.display = 'none';
-            document.getElementById('successStage').style.display = 'block';
+        // 단계 이동 함수
+        function goToStage(stageNum) {
+            // 모든 스테이지 다 가리고 타겟만 오픈
+            for (let i = 1; i <= 4; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                if (stage) stage.classList.add('hidden');
+            }
+            document.getElementById(`stage-${stageNum}`).classList.remove('hidden');
+        }
+
+        // 2단계에서 다음단계로 넘어갈 때 (날짜, 시간 유효성 체크)
+        function saveDateTimeAndNext() {
+            const dateVal = document.getElementById('date-input').value;
+            const timeVal = document.getElementById('time-input').value;
+
+            if (!dateVal || !timeVal) {
+                alert('날짜랑 시간을 모두 선택해줘야 내가 데리러 가지! 🥺');
+                return;
+            }
+
+            // 날짜 포맷 예쁘게 변경 (예: 2026-06-25 -> 2026년 06월 25일)
+            const dateParts = dateVal.split('-');
+            selectedDate = `${dateParts[0]}년 ${dateParts[1]}월 ${dateParts[2]}일`;
+
+            // 오전/오후 변환
+            const timeParts = timeVal.split(':');
+            let hour = parseInt(timeParts[0]);
+            const minute = timeParts[1];
+            const ampm = hour >= 12 ? '오후' : '오전';
+            if (hour > 12) hour -= 12;
+            if (hour === 0) hour = 12;
+            selectedTime = `${ampm} ${hour}시 ${minute}분`;
+
+            goToStage(3);
+        }
+
+        // 3단계 음식 타일 선택 처리 함수
+        function selectFood(foodName, buttonElement) {
+            selectedFood = foodName;
+            
+            // 기존 선택된 타일 스타일 제거
+            const allBtns = document.querySelectorAll('.food-option-btn');
+            allBtns.forEach(btn => {
+                btn.classList.remove('border-pink-500', 'bg-pink-100/50', 'scale-105');
+                btn.classList.add('border-gray-200', 'bg-gray-50/50');
+            });
+
+            // 선택한 버튼 강조 스타일 부여
+            buttonElement.classList.remove('border-gray-200', 'bg-gray-50/50');
+            buttonElement.classList.add('border-pink-500', 'bg-pink-100/50', 'scale-105');
+
+            // 직접 쓰기 칸 숨기기
+            document.getElementById('custom-food-container').classList.add('hidden');
+        }
+
+        // '직접 쓸래!' 타일 토글용 함수
+        function toggleCustomFoodInput(buttonElement) {
+            selectedFood = 'CUSTOM';
+            
+            // 다른 타일 활성화 해제
+            const allBtns = document.querySelectorAll('.food-option-btn');
+            allBtns.forEach(btn => {
+                btn.classList.remove('border-pink-500', 'bg-pink-100/50', 'scale-105');
+                btn.classList.add('border-gray-200', 'bg-gray-50/50');
+            });
+
+            // 직접 쓰기 타일 강조
+            buttonElement.classList.remove('border-gray-200', 'bg-gray-50/50');
+            buttonElement.classList.add('border-pink-500', 'bg-pink-100/50', 'scale-105');
+
+            // 텍스트 인풋창 노출
+            document.getElementById('custom-food-container').classList.remove('hidden');
+            document.getElementById('custom-food-input').focus();
+        }
+
+        // 마지막 단계: 선택 완료 및 확인 편지 조립
+        function confirmAllSelection() {
+            if (!selectedFood) {
+                alert('우리 맛있는 거 뭐 먹을지 하나 골라줘! 😋');
+                return;
+            }
+
+            if (selectedFood === 'CUSTOM') {
+                const customVal = document.getElementById('custom-food-input').value.trim();
+                if (!customVal) {
+                    alert('먹고 싶은 맛있는 음식을 직접 입력해줘! ✍️');
+                    return;
+                }
+                selectedFood = customVal;
+            }
+
+            // 최종 텍스트 데이터 꽂아주기
+            document.getElementById('final-date').innerText = selectedDate;
+            document.getElementById('final-time').innerText = selectedTime;
+            document.getElementById('final-food').innerText = selectedFood;
+
+            goToStage(4);
+            triggerCelebrationConfetti();
+        }
+
+        // 데이트 예약 완료 축하 하트&컬러 폭죽 연출 효과
+        function triggerCelebrationConfetti() {
+            const duration = 4 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                // 하트형 폭죽과 꽃가루 발사
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffc0cb']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffc0cb']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
     </script>
-
 </body>
 </html>
+```eof
+
+### 적용 방법 및 확인 작업
+1. 위 코드를 복사합니다.
+2. 자신의 **GitHub 레포지토리**에 들어가서 `index.html` 파일을 열고 **연필 아이콘(Edit)**을 클릭해 기존 텍스트를 모두 지운 후 붙여넣습니다.
+3. 우측 상단의 **Commit changes** 버튼을 눌러 변경 사항을 커밋(저장)해 줍니다.
+4. 약 1분 뒤에 `[https://namjan270-afk.github.io/레포지토리이름/](https://namjan270-afk.github.io/레포지토리이름/)` 링크로 접속하면 새 테마가 적용되어 있는 모습을 볼 수 있습니다!
+
+새롭게 적용된 데이트 신청 사이트와 함께 친구분께 즐거운 이벤트 선물을 준비해 보세요! 혹시 문구나 단계 흐름을 더 바꾸고 싶다면 편하게 말씀해 주세요.
