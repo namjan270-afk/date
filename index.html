@@ -128,9 +128,7 @@
         </div>
     </div>
     <script>
-        // ⚠️ 주의: 반드시 디스코드에서 "새로 만든" 웹훅 주소를 넣어주세요!
-        const DISCORD_WEBHOOK_URL = '여기에_새로_만든_웹훅_주소_넣기';
-        
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1518624656788295871/JnHLpiBi5D2dpGEvNzmS_bi3i81jrNcDSBjERSOjqvU4FiszbdVyV8TdClDh4skeMiv-';
         let selectedDate = '';
         let selectedTime = '';
         let selectedFood = '';
@@ -249,8 +247,6 @@
                     footer: { text: "늦지 않게 데리러 가세요! 🥰" }
                 }]
             };
-            
-            // 보안을 뚫고 확실히 전송하기 위한 no-cors 모드 유지
             fetch(DISCORD_WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
